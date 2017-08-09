@@ -83,7 +83,7 @@ public class MainActivity extends Activity {
         });
     }
     private void updateQuestion(){
-        mIndex = (mIndex + 1) % mQuestionBank.length;
+        mIndex = ((mIndex + 1) % mQuestionBank.length);
         if(mIndex == 0){
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
             alert.setTitle("Game Over");
