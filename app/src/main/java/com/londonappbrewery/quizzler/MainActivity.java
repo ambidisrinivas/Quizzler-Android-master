@@ -18,11 +18,13 @@ public class MainActivity extends Activity {
     Button mTrueButton;
     Button mFalseButton;
     TextView mQuestionTextView;
-    int mIndex;
+    int mIndex = 0;
     int mQuestion;
     TextView mScoreTextView;
     ProgressBar mProgressBar;
     int mScore;
+    private String Scorekey;
+    private String Indexkey;
 
     // TODO: Uncomment to create question bank
     private TrueFalse[] mQuestionBank = new TrueFalse[]{
@@ -46,15 +48,16 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        if(savedInstanceState != null){
+//            mScore = savedInstanceState.getInt("ScoreKey");
+//            mIndex = savedInstanceState.getInt("IndexKey");
+//        }
+//        else{
+//            mScore = 0;
+//            mIndex = 0;
+//        }
+
         setContentView(R.layout.activity_main);
-        if(savedInstanceState != null){
-            mScore = savedInstanceState.getInt("ScoreKey");
-            mIndex = savedInstanceState.getInt("IndexKey");
-        }
-        else{
-            mScore = 0;
-            mIndex = 0;
-        }
 
         mTrueButton = (Button) findViewById(R.id.true_button);
         mFalseButton = (Button) findViewById(R.id.false_button);
@@ -82,9 +85,10 @@ public class MainActivity extends Activity {
             }
         });
     }
-    private void updateQuestion(){
+
+    private void updateQuestion() {
         mIndex = ((mIndex + 1) % mQuestionBank.length);
-        if(mIndex == 0){
+        if (mIndex == 0) {
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
             alert.setTitle("Game Over");
             alert.setCancelable(false);
@@ -103,22 +107,30 @@ public class MainActivity extends Activity {
         mScoreTextView.setText("Score " + mScore + "/" + mQuestionBank.length);
     }
 
-    private  void checkAnswer(boolean userSelection){
+    private void checkAnswer(boolean userSelection) {
 
         boolean correctAnswer = mQuestionBank[mIndex].isAnswer();
-        if(userSelection == correctAnswer){
+        if (userSelection == correctAnswer) {
             Toast.makeText(getApplicationContext(), R.string.correct_toast, Toast.LENGTH_SHORT).show();
             mScore = mScore + 1;
-        }
-        else{
+        } else {
             Toast.makeText(getApplicationContext(), R.string.incorrect_toast, Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState){
+    public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt("Scorekey", mScore);
-        outState.putInt("Indexkey", mIndex);
+        outState.putInt(Scorekey, mScore);
+        outState.putInt(Indexkey, mIndex);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle outstate) {
+        // Always call the superclass so it can restore the view hierarchy
+        super.onRestoreInstanceState(outstate);
+        // Restore state members from saved instance
+        mScore = outstate.getInt(Scorekey);
+        mIndex = outstate.getInt(Indexkey);
     }
 }
